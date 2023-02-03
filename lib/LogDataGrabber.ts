@@ -67,9 +67,9 @@ export default function init() {
                     },
                     {
                       name: "Attacker Location" as string,
-                      value: `${item.src_geoip.region_name || "Unknown"}, ${
-                        item.src_geoip.country_code
-                      }` as string,
+                      value: `${
+                        item.src_geoip.region_name || "Unknown City"
+                      }, ${item.src_geoip.country_code}` as string,
                       inline: true,
                     },
                     {
@@ -110,8 +110,14 @@ export default function init() {
           }
         );
       }
+
+      return;
     });
+
+    return;
   });
+
+  return;
 }
 
 async function getASNInfo(ip: string) {
