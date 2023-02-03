@@ -145,7 +145,7 @@ export async function serveIPList() {
   let app = express();
   let port = 8080;
 
-  app.get("/", (req: any, res: any) => {
+  app.get("/", (_req: any, res: any) => {
     return res.json(alreadyPosted);
   });
 
