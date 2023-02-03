@@ -107,7 +107,7 @@ export default function init() {
               alreadyPosted.push(item.src_ip);
               i++;
 
-              setTimeout(post, 30000);
+              setTimeout(post, 60000);
             };
 
             await post();
