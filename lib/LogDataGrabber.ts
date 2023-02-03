@@ -3,6 +3,7 @@
 import fs from "fs";
 import path from "path";
 import axios from "axios";
+import express from "express";
 import { webhook } from "../config";
 
 let directoryPath = path.join(__dirname, "../dump");
@@ -45,6 +46,9 @@ export default function init() {
                   title: ("Failed Attack - " + item.process_name) as string,
                   description: `**${item.message}**` as string,
                   color: 0x5865f2,
+                  thumbnail: {
+                    url: "https://64.media.tumblr.com/505f72684d61f8ee355ce5ad5fdd2857/tumblr_nst7fsLmt01rglfeho1_1280.gif",
+                  },
                   fields: [
                     {
                       name: "Timestamp" as string,
@@ -120,7 +124,7 @@ export default function init() {
   return;
 }
 
-async function getASNInfo(ip: string) {
+export async function getASNInfo(ip: string) {
   try {
     let response = await axios.get(`https://whois.arin.net/rest/ip/${ip}.json`);
 
@@ -135,4 +139,17 @@ async function getASNInfo(ip: string) {
 
     return { name, number };
   }
+}
+
+export async function ServeIPList() {
+  let app = express();
+  let port = 8080;
+
+  app.get("/", (req: any, res: any) => {
+    return res.json(alreadyPosted);
+  });
+
+  app.listen(port, () => {
+    console.log(`Serving IPs at http://localhost:${port}`);
+  });
 }
