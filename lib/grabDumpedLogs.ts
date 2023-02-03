@@ -4,10 +4,10 @@ import fs from "fs";
 import path from "path";
 import axios from "axios";
 import express from "express";
+import database, { push, includes, all } from "./database";
 import { webhook } from "../config";
 
 let directoryPath = path.join(__dirname, "../dump");
-let alreadyPosted: any[] = [];
 
 export default function grabDumpedLogs() {
   console.log("Starting log grabber...");
@@ -34,7 +34,7 @@ export default function grabDumpedLogs() {
               if (i === jsonData.length) return;
 
               let item = jsonData[i];
-              if (alreadyPosted.includes(item.src_ip)) {
+              if (await includes(item.src_ip)) {
                 i++;
                 post();
               }
@@ -66,19 +66,21 @@ export default function grabDumpedLogs() {
                     },
                     {
                       name: "Attacker IP" as string,
-                      value: item.src_ip as string,
+                      value: ("```" + item.src_ip + "```") as string,
                       inline: true,
                     },
                     {
                       name: "Attacker Location" as string,
-                      value: `${
-                        item.src_geoip.region_name || "Unknown City"
-                      }, ${item.src_geoip.country_code}` as string,
+                      value: ("```" +
+                        `${item.src_geoip.region_name || "Unknown City"}, ${
+                          item.src_geoip.country_code
+                        }` +
+                        "```") as string,
                       inline: true,
                     },
                     {
                       name: "Target System" as string,
-                      value: item.system.hostname as string,
+                      value: ("```" + item.system.hostname + "```") as string,
                       inline: true,
                     },
                   ],
@@ -104,7 +106,7 @@ export default function grabDumpedLogs() {
               });
 
               console.log("Webhook delivered successfully");
-              alreadyPosted.push(item.src_ip);
+              await push(item.src_ip);
               i++;
 
               setTimeout(post, 60000);
@@ -146,7 +148,7 @@ export async function serveIPList() {
   let port = 8080;
 
   app.get("/", (req: any, res: any) => {
-    return res.json(alreadyPosted);
+    return res.json(all);
   });
 
   app.listen(port, () => {
