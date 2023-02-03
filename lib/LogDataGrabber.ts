@@ -125,7 +125,7 @@ async function getASNInfo(ip: string) {
     return { name, number };
   } catch (error) {
     let name = "ARIN API Rate Limited";
-    let number = "ARIN API Rate Limited";
+    let number = "";
 
     return { name, number };
   }
