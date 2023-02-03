@@ -9,7 +9,7 @@ import { webhook } from "../config";
 let directoryPath = path.join(__dirname, "../dump");
 let alreadyPosted: any[] = [];
 
-export default function init() {
+export default function grabDumpedLogs() {
   console.log("Starting log grabber...");
 
   fs.readdir(directoryPath, function (err, files) {
@@ -141,7 +141,7 @@ export async function getASNInfo(ip: string) {
   }
 }
 
-export async function ServeIPList() {
+export async function serveIPList() {
   let app = express();
   let port = 8080;
 

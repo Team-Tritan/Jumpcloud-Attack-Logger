@@ -1,8 +1,10 @@
 "use strict";
 
-import init, { ServeIPList } from "./lib/LogDataGrabber";
+import grabDumpedLogs, { serveIPList } from "./lib/grabDumpedLogs";
+import downloadLogs from "./lib/downloadLogs";
 
 (async () => {
-  await init();
-  await ServeIPList();
+  //await downloadLogs();
+  await grabDumpedLogs();
+  await serveIPList();
 })();
