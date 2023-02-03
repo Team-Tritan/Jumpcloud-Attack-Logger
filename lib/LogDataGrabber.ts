@@ -91,19 +91,16 @@ export default function init() {
                 data: data,
               };
 
-              await axios(config)
-                .then((response) => {
-                  console.log("Webhook delivered successfully");
-                  alreadyPosted.push(item.src_ip);
-                })
-                .catch((error) => {
-                  if (error.response.status === 429) {
-                    console.log("Webhook rate limited, retrying in 30 seconds");
-                    setTimeout(post, 30000);
-                    return;
-                  }
-                });
+              await axios(config).catch((error) => {
+                if (error.response.status === 429) {
+                  console.log("Webhook rate limited, retrying in 30 seconds");
+                  setTimeout(post, 30000);
+                  return;
+                }
+              });
 
+              console.log("Webhook delivered successfully");
+              alreadyPosted.push(item.src_ip);
               i++;
 
               setTimeout(post, 30000);
