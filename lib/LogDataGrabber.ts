@@ -93,8 +93,8 @@ export default function init() {
 
               await axios(config).catch((error) => {
                 if (error.response.status === 429) {
-                  console.log("Webhook rate limited, retrying in 30 seconds");
-                  setTimeout(post, 30000);
+                  console.log("Webhook rate limited, retrying in 60 seconds");
+                  setTimeout(post, 60000);
                   return;
                 }
               });
