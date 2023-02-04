@@ -16,4 +16,4 @@ This is exactly what the title says lol, it takes jumpcloud exported logs, sifts
 
 ## Discord Embed
 
-![img](https://i.imgur.com/AqJzbDQ.png)
+![img](https://i.imgur.com/KKfna15.png)
