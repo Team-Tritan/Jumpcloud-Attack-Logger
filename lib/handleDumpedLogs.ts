@@ -9,7 +9,6 @@ import postHastebin from "./hastebin";
 import getASNInfo from "./asnLookup";
 
 let directoryPath = path.join(__dirname, "../dump");
-
 let alreadyPosted: any[] = [];
 
 export default function handleDumpedLogs() {
@@ -97,7 +96,7 @@ export default function handleDumpedLogs() {
               console.log("Sending webhook to Discord...");
               let data = JSON.stringify({ content: null, embeds: payload });
 
-              await new Promise((resolve) => setTimeout(resolve, 500));
+              await new Promise((resolve) => setTimeout(resolve, 1000));
               await axios
                 .post(webhook, data, {
                   headers: {
