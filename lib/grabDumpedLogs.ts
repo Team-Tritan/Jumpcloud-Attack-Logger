@@ -60,7 +60,7 @@ export default function grabDumpedLogs() {
                       inline: false,
                     },
                     {
-                      name: "Attacker ASN Whois" as string,
+                      name: "ARIN ASN/ISP Whois" as string,
                       value: ("```" +
                         asn_lookup?.name +
                         "\n\n" +
