@@ -5,11 +5,14 @@ import path from "path";
 import axios from "axios";
 import express from "express";
 import { webhook } from "../config";
+import postHastebin from "./hastebin";
+import getASNInfo from "./asnLookup";
 
 let directoryPath = path.join(__dirname, "../dump");
+
 let alreadyPosted: any[] = [];
 
-export default function grabDumpedLogs() {
+export default function handleDumpedLogs() {
   console.log("Starting log grabber...");
 
   fs.readdir(directoryPath, function (err, files) {
@@ -94,7 +97,7 @@ export default function grabDumpedLogs() {
               console.log("Sending webhook to Discord...");
               let data = JSON.stringify({ content: null, embeds: payload });
 
-              await new Promise((resolve) => setTimeout(resolve, 3000));
+              await new Promise((resolve) => setTimeout(resolve, 500));
               await axios
                 .post(webhook, data, {
                   headers: {
@@ -123,7 +126,8 @@ export default function grabDumpedLogs() {
             };
 
             await post();
-            return postHastebin(webhook);
+
+            return postHastebin(webhook, alreadyPosted);
           }
         );
       }
@@ -137,50 +141,15 @@ export default function grabDumpedLogs() {
   return;
 }
 
-export async function getASNInfo(ip: string) {
-  try {
-    let response = await axios.get(`https://whois.arin.net/rest/ip/${ip}.json`);
-
-    let name = response.data?.net?.orgRef?.["@name"] || "ISP Unknown to ARIN";
-    let number =
-      response.data?.net?.originASes?.originAS?.["$"] || "AS Unknown to ARIN";
-
-    return { name, number };
-  } catch (error) {
-    let name = "ARIN API Rate Limited";
-    let number = "";
-
-    return { name, number };
-  }
-}
-
 export async function serveIPList() {
   let app = express();
   let port = 8080;
 
   app.get("/", (req: any, res: any) => {
-    return res.json(alreadyPosted);
+    return res.json({ attacker_ips: alreadyPosted });
   });
 
   app.listen(port, () => {
     console.log(`Serving IPs at http://localhost:${port}`);
   });
-}
-
-export async function postHastebin(webhook: string) {
-  let data = JSON.stringify(alreadyPosted);
-
-  let response = await axios.post("https://bin.tritan.gg/documents", data);
-  let url = "https://bin.tritan.gg" + response.data.key;
-
-  let d = new Date();
-
-  await axios.post(
-    webhook,
-    JSON.stringify({
-      content: `**${
-        alreadyPosted.length
-      } Failed Attacks on ${d.toDateString()}**\n\nIP Dump: ${url}`,
-    })
-  );
 }
