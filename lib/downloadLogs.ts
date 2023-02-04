@@ -8,8 +8,10 @@ export default async function downloadLogs() {
   let browser = await puppeteer.launch({ headless: false });
   let page = await browser.newPage();
 
-  console.log("Getting & downloading logs in emulated browswer...");
-
+  // tell user stuff
+  console.log(
+    "Logging into jumpcloud & downloading logs in emulated browser..."
+  );
   // set viewport and user agent (just in case for nice viewing)
   await page.setViewport({ width: 1280, height: 800 });
   // start
@@ -51,10 +53,11 @@ export default async function downloadLogs() {
     "xpath///html/body/div/div[4]/main/div[1]/div[3]/div/div[4]/div[1]/div/div[2]/ul/li/menu/li[1]/a/div/span"
   );
   // waii
-  await sleep(5000);
+  await sleep(30000);
   // move file from downloads to dump
   console.log("Moving file from ~/Downloads to ./dump");
   exec("mv ~/Downloads/*.json ./dump/");
+  // waii
   await sleep(5000);
   // close browser
   await browser.close();

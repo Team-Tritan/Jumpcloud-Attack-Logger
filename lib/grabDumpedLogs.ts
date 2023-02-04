@@ -29,15 +29,19 @@ export default function grabDumpedLogs() {
 
             let jsonData = JSON.parse(data);
 
+            jsonData = jsonData.filter(
+              (item: any, index: any) =>
+                jsonData.findIndex(
+                  (item2: any) => item2.src_ip === item.src_ip
+                ) === index
+            );
+
             let i = 0;
+
             let post = async () => {
               if (i === jsonData.length) return;
 
               let item = jsonData[i];
-              if (alreadyPosted.includes(item.src_ip)) {
-                i++;
-                post();
-              }
 
               let asn_lookup = await getASNInfo(item.src_ip);
 
@@ -66,19 +70,21 @@ export default function grabDumpedLogs() {
                     },
                     {
                       name: "Attacker IP" as string,
-                      value: item.src_ip as string,
+                      value: ("```" + item.src_ip + "```") as string,
                       inline: true,
                     },
                     {
                       name: "Attacker Location" as string,
-                      value: `${
-                        item.src_geoip.region_name || "Unknown City"
-                      }, ${item.src_geoip.country_code}` as string,
+                      value: ("```" +
+                        `${item.src_geoip.region_name || "Unknown City"}, ${
+                          item.src_geoip.country_code
+                        }` +
+                        "```") as string,
                       inline: true,
                     },
                     {
                       name: "Target System" as string,
-                      value: item.system.hostname as string,
+                      value: ("```" + item.system.hostname + "```") as string,
                       inline: true,
                     },
                   ],
@@ -88,29 +94,36 @@ export default function grabDumpedLogs() {
               console.log("Sending webhook to Discord...");
               let data = JSON.stringify({ content: null, embeds: payload });
 
-              let config = {
-                method: "POST",
-                url: webhook,
-                headers: { "Content-Type": "application/json" },
-                data: data,
-              };
+              await new Promise((resolve) => setTimeout(resolve, 3000));
+              await axios
+                .post(webhook, data, {
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                })
+                .then(() => {
+                  console.log("Webhook delivered successfully");
+                  alreadyPosted.push(item.src_ip);
+                })
+                .catch(async (error: any) => {
+                  if (error.response.status === 429) {
+                    return console.log(
+                      "Webhook rate limited, returning",
+                      error.response.data
+                    );
+                  } else {
+                    return console.error(
+                      error.response.status + error.response.data
+                    );
+                  }
+                });
 
-              await axios(config).catch((error) => {
-                if (error.response.status === 429) {
-                  console.log("Webhook rate limited, retrying in 60 seconds");
-                  setTimeout(post, 60000);
-                  return;
-                }
-              });
-
-              console.log("Webhook delivered successfully");
-              alreadyPosted.push(item.src_ip);
               i++;
-
-              setTimeout(post, 60000);
+              await post();
             };
 
             await post();
+            return postHastebin(webhook);
           }
         );
       }
@@ -145,11 +158,29 @@ export async function serveIPList() {
   let app = express();
   let port = 8080;
 
-  app.get("/", (_req: any, res: any) => {
+  app.get("/", (req: any, res: any) => {
     return res.json(alreadyPosted);
   });
 
   app.listen(port, () => {
     console.log(`Serving IPs at http://localhost:${port}`);
   });
+}
+
+export async function postHastebin(webhook: string) {
+  let data = JSON.stringify(alreadyPosted);
+
+  let response = await axios.post("https://bin.tritan.gg/documents", data);
+  let url = "https://bin.tritan.gg" + response.data.key;
+
+  let d = new Date();
+
+  await axios.post(
+    webhook,
+    JSON.stringify({
+      content: `**${
+        alreadyPosted.length
+      } Failed Attacks on ${d.toDateString()}**\n\nIP Dump: ${url}`,
+    })
+  );
 }
