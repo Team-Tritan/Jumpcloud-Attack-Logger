@@ -5,13 +5,14 @@ import path from "path";
 import axios from "axios";
 import express from "express";
 import { webhook } from "../config";
-import postHastebin from "./hastebin";
-import getASNInfo from "./asnLookup";
+import postHastebin from "../utils/postHastebin";
+import getASNInfo from "../utils/asnLookup";
+import clearDumpCache from "../utils/clearDump";
 
 let directoryPath = path.join(__dirname, "../dump");
 let alreadyPosted: any[] = [];
 
-export default function handleDumpedLogs() {
+export default async function handleDumpedLogs() {
   console.log("Starting log grabber...");
 
   fs.readdir(directoryPath, function (err, files) {
@@ -126,7 +127,7 @@ export default function handleDumpedLogs() {
 
             await post();
 
-            return postHastebin(webhook, alreadyPosted);
+            return await postHastebin(webhook, alreadyPosted);
           }
         );
       }
@@ -136,6 +137,8 @@ export default function handleDumpedLogs() {
 
     return;
   });
+
+  await clearDumpCache();
 
   return;
 }

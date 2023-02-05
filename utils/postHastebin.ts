@@ -6,10 +6,10 @@ export default async function postHastebin(
   webhook: string,
   alreadyPosted: any
 ) {
-  let data = JSON.stringify(alreadyPosted);
+  let data = JSON.stringify({ attacker_ips: alreadyPosted });
 
   let response = await axios.post("https://bin.tritan.gg/documents", data);
-  let url = "https://bin.tritan.gg/" + response.data.key;
+  let url = "https://bin.tritan.gg/raw/" + response.data.key;
 
   let d = new Date();
   let date = d.toLocaleDateString();

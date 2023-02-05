@@ -1,11 +1,10 @@
 "use strict";
 
-import handleDumpedLogs, { serveIPList } from "./lib/handleDumpedLogs";
-import downloadLogs, { sleep } from "./lib/downloadLogs";
+import dataDownload from "./lib/dataDownload";
+import dataHandler, { serveIPList } from "./lib/dataHandler";
 
-(async () => {
-  await downloadLogs();
-  await sleep(10000);
-  await handleDumpedLogs();
+setInterval(async function init() {
+  await dataDownload();
+  await dataHandler();
   await serveIPList();
-})();
+}, 1000 * 60 * 60 * 24);
