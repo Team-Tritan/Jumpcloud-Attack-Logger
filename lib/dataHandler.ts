@@ -149,9 +149,18 @@ export async function serveIPList() {
 
   app.get("/", (req: any, res: any) => {
     return res.json({
-      dump_date: Date.now().toLocaleString(),
-      attacker_ips: alreadyPosted,
+      current_day: {
+        date: new Date().toLocaleDateString(),
+        attacker_ips: alreadyPosted,
+      },
+      prior_dumps: {
+        url: "/prior",
+      },
     });
+  });
+
+  app.get("/prior", (req: any, res: any) => {
+    return res.sendFile(path.join(__dirname, "../dump/hastebin_urls.txt"));
   });
 
   app.listen(port, () => {
