@@ -148,7 +148,10 @@ export async function serveIPList() {
   let port = 8080;
 
   app.get("/", (req: any, res: any) => {
-    return res.json({ attacker_ips: alreadyPosted });
+    return res.json({
+      dump_date: Date.now().toLocaleString(),
+      attacker_ips: alreadyPosted,
+    });
   });
 
   app.listen(port, () => {

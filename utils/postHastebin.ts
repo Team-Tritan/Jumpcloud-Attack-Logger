@@ -1,6 +1,7 @@
 "use strict";
 
 import axios from "axios";
+import { exec } from "child_process";
 
 export default async function postHastebin(
   webhook: string,
@@ -17,4 +18,6 @@ export default async function postHastebin(
   await axios.post(webhook, {
     content: `**${alreadyPosted.length} failed attacks on ${date}**\nAttacker IP Dump: ${url}`,
   });
+
+  exec(`echo "${date} - ${url}" >> ./dump/hastebin_urls.txt`);
 }
