@@ -7,7 +7,6 @@ import express from "express";
 import { webhook } from "../config";
 import postHastebin from "../utils/postHastebin";
 import getASNInfo from "../utils/asnLookup";
-import clearDumpCache from "../utils/clearDump";
 
 let directoryPath = path.join(__dirname, "../dump");
 let alreadyPosted: any[] = [];
@@ -137,8 +136,6 @@ export default async function handleDumpedLogs() {
 
     return;
   });
-
-  await clearDumpCache();
 
   return;
 }
