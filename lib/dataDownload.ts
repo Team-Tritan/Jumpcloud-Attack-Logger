@@ -5,7 +5,10 @@ import { jc_username, jc_password } from "../config";
 import { exec } from "child_process";
 
 export default async function downloadLogs() {
-  let browser = await puppeteer.launch({ headless: false });
+  let browser = await puppeteer.launch({
+    headless: true,
+    args: ["--no-sandbox"],
+  });
   let page = await browser.newPage();
 
   console.log(
