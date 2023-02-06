@@ -6,8 +6,7 @@ import { exec } from "child_process";
 
 export default async function downloadLogs() {
   let browser = await puppeteer.launch({
-    headless: true,
-    args: ["--no-sandbox"],
+    headless: false,
   });
   let page = await browser.newPage();
 
