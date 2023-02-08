@@ -5,7 +5,7 @@ import { exec } from "child_process";
 
 export default async function postHastebin(
   webhook: string,
-  alreadyPosted: any
+  alreadyPosted: any[]
 ) {
   let data = JSON.stringify({ attacker_ips: alreadyPosted });
 
@@ -20,4 +20,8 @@ export default async function postHastebin(
   });
 
   exec(`echo "${date} - ${url}" >> ./dump/hastebin_urls.txt`);
+
+  console.log("Final webhook delivered successfully.");
+
+  return;
 }

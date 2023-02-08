@@ -3,7 +3,7 @@
 import fs from "fs";
 import path from "path";
 import axios from "axios";
-import express from "express";
+import express, { Request, Response } from "express";
 import { webhook } from "../config";
 import postHastebin from "../utils/postHastebin";
 import returnPayload from "../utils/returnPayload";
@@ -100,7 +100,7 @@ export async function serveIPList() {
   let app = express();
   let port = 8080;
 
-  app.get("/", (req: any, res: any) => {
+  app.get("/", (req: Request, res: Response) => {
     return res.json({
       current_day: {
         date: new Date().toLocaleDateString(),

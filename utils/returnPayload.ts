@@ -2,7 +2,7 @@
 
 import getASNInfo from "./asnLookup";
 
-export interface jsonData {
+export interface JumpcloudData {
   message: string;
   system_timestamp: string;
   src_ip: string;
@@ -17,7 +17,7 @@ export interface jsonData {
 
 export default async function returnPayload(
   i: number,
-  jsonData: jsonData[],
+  jsonData: JumpcloudData[],
   item: any
 ) {
   let asn_lookup = await getASNInfo(item.src_ip);
@@ -39,9 +39,9 @@ export default async function returnPayload(
         {
           name: "ARIN ASN/ISP Whois" as string,
           value: ("```" +
-            asn_lookup?.name +
+            asn_lookup?.org +
             "\n\n" +
-            asn_lookup?.number +
+            asn_lookup?.asn +
             "```") as string,
           inline: false,
         },

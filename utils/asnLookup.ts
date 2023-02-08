@@ -2,19 +2,24 @@
 
 import axios from "axios";
 
+export interface asnLookup {
+  org: string;
+  asn: string;
+}
+
 export default async function getASNInfo(ip: string) {
   try {
     let response = await axios.get(`https://whois.arin.net/rest/ip/${ip}.json`);
 
-    let name = response.data?.net?.orgRef?.["@name"] || "ISP Unknown to ARIN";
-    let number =
+    let org = response.data?.net?.orgRef?.["@name"] || "ISP Unknown to ARIN";
+    let asn =
       response.data?.net?.originASes?.originAS?.["$"] || "AS Unknown to ARIN";
 
-    return { name, number };
+    return { org, asn } as asnLookup;
   } catch (error) {
-    let name = "ARIN API Rate Limited";
-    let number = "";
+    let org = "ARIN API Rate Limited";
+    let asn = "";
 
-    return { name, number };
+    return { org, asn } as asnLookup;
   }
 }
