@@ -16,7 +16,7 @@ export default async function postHastebin(
   let date = d.toLocaleDateString();
 
   await axios.post(webhook, {
-    content: `**${alreadyPosted.length} failed attacks on ${date}**\nAttacker IP Dump: ${url}`,
+    content: `**${alreadyPosted.length} failed attacks from unique IPs on ${date}**\nAttacker IP Dump: ${url}`,
   });
 
   exec(`echo "${date} - ${url}" >> ./dump/hastebin_urls.txt`);

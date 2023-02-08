@@ -8,6 +8,7 @@ export default async function downloadLogs() {
   let browser = await puppeteer.launch({
     headless: false,
   });
+
   let page = await browser.newPage();
 
   console.log(

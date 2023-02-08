@@ -6,7 +6,7 @@ import axios from "axios";
 import express from "express";
 import { webhook } from "../config";
 import postHastebin from "../utils/postHastebin";
-import getASNInfo from "../utils/asnLookup";
+import returnPayload from "../utils/returnPayload";
 
 let directoryPath = path.join(__dirname, "../dump");
 let alreadyPosted: any[] = [];
@@ -45,59 +45,11 @@ export default async function handleDumpedLogs() {
 
               let item = jsonData[i];
 
-              let asn_lookup = await getASNInfo(item.src_ip);
-
               try {
-                let payload = [
-                  {
-                    title: (`${i}/${jsonData.length} IPs - Failed Attack - ` +
-                      item.process_name) as string,
-                    description: `**${item.message}**` as string,
-                    color: 0x5865f2,
-                    thumbnail: {
-                      url: "https://64.media.tumblr.com/505f72684d61f8ee355ce5ad5fdd2857/tumblr_nst7fsLmt01rglfeho1_1280.gif",
-                    },
-                    fields: [
-                      {
-                        name: "Timestamp" as string,
-                        value: ("```" +
-                          item.system_timestamp +
-                          "```") as string,
-                        inline: false,
-                      },
-                      {
-                        name: "ARIN ASN/ISP Whois" as string,
-                        value: ("```" +
-                          asn_lookup?.name +
-                          "\n\n" +
-                          asn_lookup?.number +
-                          "```") as string,
-                        inline: false,
-                      },
-                      {
-                        name: "Attacker IP" as string,
-                        value: ("```" + item.src_ip + "```") as string,
-                        inline: true,
-                      },
-                      {
-                        name: "Attacker Location" as string,
-                        value: ("```" +
-                          `${
-                            item?.src_geoip?.country_code || "Unknown Country"
-                          }` +
-                          "```") as string,
-                        inline: true,
-                      },
-                      {
-                        name: "Target System" as string,
-                        value: ("```" + item.system.hostname + "```") as string,
-                        inline: true,
-                      },
-                    ],
-                  },
-                ];
+                let payload = returnPayload(i, jsonData, item);
 
                 console.log("Sending webhook to Discord...");
+
                 let data = JSON.stringify({ content: null, embeds: payload });
 
                 await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -117,14 +69,11 @@ export default async function handleDumpedLogs() {
                         "Webhook rate limited, returning",
                         error.response.data
                       );
-                    } else {
-                      return console.error(
-                        error.response.status + error.response.data
-                      );
                     }
                   });
 
                 i++;
+
                 await post();
               } catch (e) {
                 return console.log(e);
