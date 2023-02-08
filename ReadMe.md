@@ -17,3 +17,12 @@ This is exactly what the title says lol, it takes jumpcloud exported logs, sifts
 ## Discord Embed
 
 ![img](https://i.imgur.com/KKfna15.png)
+
+## Extras
+
+- Dumps daily IPs into hastebin
+- Posts to discord webhook, with raw dump json file
+- Stores hastebin dumps in `./dump/hastebin_urls.txt`
+- Auto cleans storage
+- Has an API that shows both current ones and prior stored URLs
+- More??? Maybe
