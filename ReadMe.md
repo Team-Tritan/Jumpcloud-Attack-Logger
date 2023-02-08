@@ -14,10 +14,6 @@ This is exactly what the title says lol, it takes jumpcloud exported logs, sifts
 
   - `yarn start` or `npm start`
 
-## Discord Embed
-
-![img](https://i.imgur.com/KKfna15.png)
-
 ## Extras
 
 - Dumps daily IPs into hastebin
@@ -26,3 +22,7 @@ This is exactly what the title says lol, it takes jumpcloud exported logs, sifts
 - Auto cleans storage
 - Has an API that shows both current ones and prior stored URLs
 - More??? Maybe
+
+## Discord Embed
+
+![img](https://i.imgur.com/KKfna15.png)
