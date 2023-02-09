@@ -18,6 +18,9 @@ export default async function abuseReports(ip: string) {
     .get(`https://whois.arin.net/rest/org/${asn.org_id}/pocs.json`)
     .then(async (response) => {
       return response.data;
+    })
+    .catch((error) => {
+      return;
     });
 
   try {
@@ -31,7 +34,6 @@ export default async function abuseReports(ip: string) {
           });
 
           let email = poc_record.poc.emails.email["$"];
-          console.log(email);
 
           let message = `
 ARIN Abuse Contact,
@@ -51,7 +53,9 @@ We take the security of our network and customer data very seriously, and we are
 Thank you for your prompt attention to this matter.
 
 Sincerely,
-Tritan Development
+Handu Kungan Parjeet
+Chief Security Advisor
+Tritan Development & India Internet Biz
       `;
 
           let subject = `Abuse Report: IP Address ${ip}`;
@@ -61,7 +65,7 @@ Tritan Development
       })
     );
   } catch (error) {
-    console.log(error);
+    return;
   }
 }
 
@@ -92,9 +96,9 @@ export async function sendMail(
 
   transporter.sendMail(email_payload, (error: any, info: any) => {
     if (error) {
-      console.error(error);
+      return;
     } else {
-      console.log("Abuse email sent: " + info.response);
+      return console.log("Abuse email sent: " + info.response);
     }
   });
 }
