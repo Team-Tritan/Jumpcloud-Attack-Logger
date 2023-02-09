@@ -51,7 +51,7 @@ export default async function handleDumpedLogs() {
                 let payload = [
                   {
                     title: `${i} Unique Attacks / ${jsonData.length} Total | Ignoring Repeated IPs`,
-                    description: `**${item.message}**` as string,
+                    description: `${item.message}` as string,
                     color: 0x5865f2,
                     thumbnail: {
                       url: "https://64.media.tumblr.com/505f72684d61f8ee355ce5ad5fdd2857/tumblr_nst7fsLmt01rglfeho1_1280.gif",
