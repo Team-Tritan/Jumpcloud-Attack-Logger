@@ -75,7 +75,7 @@ Tritan Development
           if (email?.endsWith("lacnic.net")) return;
           if (email?.endsWith("afrinic.net")) return;
 
-          await sendMail(email, message, subject);
+          await sendReport(email, message, subject);
         }
       })
     );
@@ -84,7 +84,7 @@ Tritan Development
   }
 }
 
-export async function sendMail(
+export async function sendReport(
   email: string,
   message: string,
   subject: string
