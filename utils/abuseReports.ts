@@ -26,6 +26,8 @@ export default async function abuseReports(ip: string) {
   try {
     Promise.all(
       abuse_lookup.pocs.pocLinkRef.map(async (poc: any) => {
+        let err: boolean = false;
+
         if (poc["@description"] === "Abuse") {
           let link = poc["$"];
 
@@ -35,12 +37,13 @@ export default async function abuseReports(ip: string) {
               return response.data;
             })
             .catch((error: any) => {
-              return;
+              return (err = true);
             });
 
           let email = poc_record.poc.emails.email["$"];
 
           if (!email) return;
+          if (err) return;
 
           let subject = `Abuse Report: IP Address ${ip}`;
           let message = `
@@ -63,7 +66,7 @@ Thank you for your prompt attention to this matter.
 Sincerely,
 Handu Kungan Parjeet
 Chief Security Advisor
-Tritan Development & India Internet Biz
+Tritan Development
       `;
 
           if (email?.endsWith("arin.net")) return;

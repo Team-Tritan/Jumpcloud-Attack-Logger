@@ -97,7 +97,9 @@ export default async function handleDumpedLogs() {
                   },
                 ];
 
-                console.log("Sending webhook to Discord...");
+                console.log(
+                  `Sending webhook for ${item.src_ip} - ${asn_lookup.asn} - ${asn_lookup.org}.`
+                );
 
                 let data = JSON.stringify({ content: null, embeds: payload });
 
@@ -108,9 +110,10 @@ export default async function handleDumpedLogs() {
                       "Content-Type": "application/json",
                     },
                   })
-                  .then(() => {
+                  .then(async () => {
                     console.log("Webhook delivered successfully");
                     alreadyPosted.push(item.src_ip);
+                    await abuseReports(item.src_ip);
                   })
                   .catch(async (error: any) => {
                     if (error.response.status === 429) {
@@ -123,8 +126,6 @@ export default async function handleDumpedLogs() {
                         console.error(error);
                       };
                   });
-
-                await abuseReports(item.src_ip);
 
                 i++;
 

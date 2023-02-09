@@ -14,7 +14,7 @@ export default async function getIPInfo(ip: string) {
 
     let org = response.data?.net?.orgRef?.["@name"] || "ISP Unknown to ARIN";
     let asn =
-      response.data?.net?.originASes?.originAS?.["$"] || "AS Unknown to ARIN";
+      response.data?.net?.originASes?.originAS?.["$"] || "ASN Unknown to ARIN";
 
     let org_id = response.data?.net?.orgRef?.["@handle"] || null;
 
