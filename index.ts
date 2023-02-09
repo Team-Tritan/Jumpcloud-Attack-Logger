@@ -4,11 +4,11 @@ import dataDownload from "./lib/dataDownload";
 import dataHandler, { serveIPList } from "./lib/dataHandler";
 import clearDumpCache from "./utils/clearDump";
 
-// (async () => {
-//   await dataDownload();
-//   await dataHandler();
-//   await serveIPList();
-// })();
+(async () => {
+  //await dataDownload();
+  await dataHandler();
+  await serveIPList();
+})();
 
 setInterval(async function init() {
   await dataDownload();

@@ -54,7 +54,7 @@ export default async function downloadLogs() {
   await sleep(5000);
 
   await browser.close();
-  await sleep(10000);
+  await sleep(15000);
 }
 
 export async function sleep(ms: number) {
