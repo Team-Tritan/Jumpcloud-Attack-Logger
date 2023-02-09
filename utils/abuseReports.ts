@@ -1,6 +1,6 @@
 "use strict";
 
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import asnLookup from "./ipLookup";
 import nodemailer from "nodemailer";
 import {
@@ -16,10 +16,10 @@ export default async function abuseReports(ip: string) {
 
   let abuse_lookup = await axios
     .get(`https://whois.arin.net/rest/org/${asn.org_id}/pocs.json`)
-    .then(async (response) => {
+    .then(async (response: AxiosResponse) => {
       return response.data;
     })
-    .catch((error) => {
+    .catch((error: any) => {
       return;
     });
 
@@ -29,12 +29,20 @@ export default async function abuseReports(ip: string) {
         if (poc["@description"] === "Abuse") {
           let link = poc["$"];
 
-          let poc_record = await axios.get(`${link}.json`).then((response) => {
-            return response.data;
-          });
+          let poc_record = await axios
+            .get(`${link}.json`)
+            .then((response) => {
+              return response.data;
+            })
+            .catch((error: any) => {
+              return;
+            });
 
           let email = poc_record.poc.emails.email["$"];
 
+          if (!email) return;
+
+          let subject = `Abuse Report: IP Address ${ip}`;
           let message = `
 ARIN Abuse Contact,
 
@@ -58,13 +66,11 @@ Chief Security Advisor
 Tritan Development & India Internet Biz
       `;
 
-          let subject = `Abuse Report: IP Address ${ip}`;
-
-          if (email.endsWith("arin.net")) return;
-          if (email.endsWith("ripe.net")) return;
-          if (email.endsWith("apnic.net")) return;
-          if (email.endsWith("lacnic.net")) return;
-          if (email.endsWith("afrinic.net")) return;
+          if (email?.endsWith("arin.net")) return;
+          if (email?.endsWith("ripe.net")) return;
+          if (email?.endsWith("apnic.net")) return;
+          if (email?.endsWith("lacnic.net")) return;
+          if (email?.endsWith("afrinic.net")) return;
 
           await sendMail(email, message, subject);
         }
@@ -105,7 +111,7 @@ export async function sendMail(
       return;
     } else {
       return console.log(
-        `Abuse email sent to ${email_payload.to} ` + info.response
+        `Abuse email sent to ${email_payload.to} - ` + info.response
       );
     }
   });
