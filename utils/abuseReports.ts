@@ -60,6 +60,12 @@ Tritan Development & India Internet Biz
 
           let subject = `Abuse Report: IP Address ${ip}`;
 
+          if (email.endsWith("arin.net")) return;
+          if (email.endsWith("ripe.net")) return;
+          if (email.endsWith("apnic.net")) return;
+          if (email.endsWith("lacnic.net")) return;
+          if (email.endsWith("afrinic.net")) return;
+
           await sendMail(email, message, subject);
         }
       })
@@ -98,7 +104,9 @@ export async function sendMail(
     if (error) {
       return;
     } else {
-      return console.log("Abuse email sent: " + info.response);
+      return console.log(
+        `Abuse email sent to ${email_payload.to} ` + info.response
+      );
     }
   });
 }
