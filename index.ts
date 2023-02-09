@@ -3,6 +3,7 @@
 import dataDownload from "./lib/dataDownload";
 import dataHandler, { serveIPList } from "./lib/dataHandler";
 import clearDumpCache from "./utils/clearDump";
+import emailAbuseReports from "./utils/abuseReports";
 
 // (async () => {
 //   await dataDownload();
@@ -19,3 +20,5 @@ setInterval(async function init() {
 setInterval(async function clearDump() {
   await clearDumpCache();
 }, 1000 * 60 * 60 * 23);
+
+emailAbuseReports("23.142.248.1");

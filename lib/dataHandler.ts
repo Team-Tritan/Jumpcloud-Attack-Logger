@@ -5,8 +5,9 @@ import path from "path";
 import axios from "axios";
 import express, { Request, Response } from "express";
 import { webhook } from "../config";
-import getASNInfo from "../utils/asnLookup";
+import getIPInfo from "../utils/ipLookup";
 import postHastebin from "../utils/postHastebin";
+import abuseReports from "../utils/abuseReports";
 
 let directoryPath = path.join(__dirname, "../dump");
 let alreadyPosted: any[] = [];
@@ -46,7 +47,7 @@ export default async function handleDumpedLogs() {
               let item = jsonData[i];
 
               try {
-                let asn_lookup = await getASNInfo(item.src_ip);
+                let asn_lookup = await getIPInfo(item.src_ip);
 
                 let payload = [
                   {
@@ -119,21 +120,23 @@ export default async function handleDumpedLogs() {
                       );
                     } else
                       (error: any) => {
-                        return console.error(error);
+                        console.error(error);
                       };
                   });
+
+                await abuseReports(item.src_ip);
 
                 i++;
 
                 await post();
               } catch (e) {
-                return console.log(e);
+                console.log(e);
               }
             };
 
             await post();
 
-            return await postHastebin(webhook, alreadyPosted);
+            await postHastebin(webhook, alreadyPosted);
           }
         );
       }
