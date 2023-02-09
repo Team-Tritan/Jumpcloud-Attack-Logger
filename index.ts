@@ -20,5 +20,3 @@ setInterval(async function init() {
 setInterval(async function clearDump() {
   await clearDumpCache();
 }, 1000 * 60 * 60 * 23);
-
-emailAbuseReports("23.142.248.1");
