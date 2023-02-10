@@ -5,6 +5,7 @@ interface Config {
   jc_username: string;
   jc_password: string;
   port: number;
+  mail_enabled: boolean;
   mail_server: string;
   mail_port: number;
   mail_tls: boolean;
@@ -20,6 +21,7 @@ export let config: Config = {
 
   port: 8080,
 
+  mail_enabled: false,
   mail_server: "",
   mail_port: 465,
   mail_tls: true,

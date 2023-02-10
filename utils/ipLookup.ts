@@ -9,6 +9,9 @@ export interface ipLookupRes {
 }
 
 export default async function getIPInfo(ip: string) {
+  if (!ip) return;
+  if (ip === "") return;
+
   try {
     let response = await axios.get(`https://whois.arin.net/rest/ip/${ip}.json`);
 

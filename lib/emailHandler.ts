@@ -6,10 +6,15 @@ import nodemailer from "nodemailer";
 import { config } from "../config";
 
 export default async function abuseReports(ip: string) {
+  if (!config.mail_enabled) return;
+
+  if (!ip) return;
+  if (ip === "") return;
+
   let asn = await asnLookup(ip);
 
   let abuse_lookup = await axios
-    .get(`https://whois.arin.net/rest/org/${asn.org_id}/pocs.json`)
+    .get(`https://whois.arin.net/rest/org/${asn?.org_id}/pocs.json`)
     .then(async (response: AxiosResponse) => {
       return response.data;
     })
@@ -43,7 +48,7 @@ export default async function abuseReports(ip: string) {
           let message = `
 ARIN Abuse Contact,
 
-This email is regarding ${ip} - ${asn?.asn} - ${asn.org}
+This email is regarding ${ip} - ${asn?.asn} - ${asn?.org}
 
 I am writing to bring to your attention a serious security issue that has been detected in our network. Our security team has identified that the IP address ${ip} is being used to carry out either Distributed Denial of Service (DDOS) attacks or to spam failed login attempts, which is an attempt to brute force into our systems.
 

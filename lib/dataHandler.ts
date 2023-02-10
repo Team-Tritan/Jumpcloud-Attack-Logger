@@ -100,7 +100,7 @@ export default async function handleDumpedLogs() {
                 ];
 
                 console.log(
-                  `Sending webhook for ${item.src_ip} - ${asn_lookup.asn} - ${asn_lookup.org}.`
+                  `Sending webhook for ${item.src_ip} - ${asn_lookup?.asn} - ${asn_lookup?.org}.`
                 );
 
                 let webhookData = JSON.stringify({

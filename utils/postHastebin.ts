@@ -7,6 +7,9 @@ export default async function postHastebin(
   webhook: string,
   alreadyPosted: any[]
 ) {
+  if (!webhook) return;
+  if (webhook === "") return;
+
   let dumpData = JSON.stringify({ attacker_ips: alreadyPosted });
 
   let response = await axios.post("https://bin.tritan.gg/documents", dumpData);
