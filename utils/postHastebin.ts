@@ -7,16 +7,36 @@ export default async function postHastebin(
   webhook: string,
   alreadyPosted: any[]
 ) {
-  let data = JSON.stringify({ attacker_ips: alreadyPosted });
+  let dumpData = JSON.stringify({ attacker_ips: alreadyPosted });
 
-  let response = await axios.post("https://bin.tritan.gg/documents", data);
-  let url = "https://bin.tritan.gg/raw/" + response.data.key;
+  let response = await axios.post("https://bin.tritan.gg/documents", dumpData);
+  let url = ("https://bin.tritan.gg/raw/" + response.data.key) as string;
 
   let d = new Date();
   let date = d.toLocaleDateString();
 
-  await axios.post(webhook, {
-    content: `**${alreadyPosted.length} failed attacks from unique IPs on ${date}**\nAttacker IP Dump: ${url}`,
+  let payload = [
+    {
+      author: {
+        name: `${date}`,
+        url: url as string,
+      },
+      fields: [
+        {
+          name: "Data Dump:",
+          value: url as string,
+        },
+      ],
+      color: 0x8953fb,
+    },
+  ];
+
+  let webhookData = JSON.stringify({ content: null, embeds: payload });
+
+  await axios.post(webhook, webhookData, {
+    headers: {
+      "Content-Type": "application/json",
+    },
   });
 
   exec(`echo "${date} - ${url}" >> ./dump/hastebin_urls.txt`);

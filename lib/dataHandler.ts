@@ -7,7 +7,7 @@ import express, { Request, Response } from "express";
 import { webhook } from "../config";
 import getIPInfo from "../utils/ipLookup";
 import postHastebin from "../utils/postHastebin";
-import abuseReports from "../utils/abuseReports";
+import abuseReports from "./emailHandler";
 
 let directoryPath = path.join(__dirname, "../dump");
 let alreadyPosted: any[] = [];
@@ -51,7 +51,9 @@ export default async function handleDumpedLogs() {
 
                 let payload = [
                   {
-                    title: `${i} Unique Attacks / ${jsonData.length} Total | Ignoring Repeated IPs`,
+                    title: `${i + 1} Unique Attacks / ${
+                      jsonData.length
+                    } Total | Ignoring Repeated IPs`,
                     description: `${item.message}` as string,
                     color: 0x5865f2,
                     thumbnail: {
@@ -101,11 +103,14 @@ export default async function handleDumpedLogs() {
                   `Sending webhook for ${item.src_ip} - ${asn_lookup.asn} - ${asn_lookup.org}.`
                 );
 
-                let data = JSON.stringify({ content: null, embeds: payload });
+                let webhookData = JSON.stringify({
+                  content: null,
+                  embeds: payload,
+                });
 
                 await new Promise((resolve) => setTimeout(resolve, 1000));
                 await axios
-                  .post(webhook, data, {
+                  .post(webhook, webhookData, {
                     headers: {
                       "Content-Type": "application/json",
                     },
