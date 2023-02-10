@@ -4,15 +4,17 @@ This is exactly what the title says lol, it takes jumpcloud exported logs, sifts
 
 ## Getting Started
 
-- Download json of jumpcloud logs daily, weekly, whatever, place in `./dump`
+- Download json of jumpcloud logs daily, weekly, whatever-- it's automated on an interval. Places in `./dump`.
 
 - Install deps, `yarn` or `npm i`
 
-- Install typescript globally, `yarn -g typescript ts-node` or `npm i typescript ts-node -g`
+- Install typescript globally, `yarn -g typescript ts-node` || `npm i typescript ts-node -g`
 
-- Start and let the thing run, it loops every 24 hours and caches what has already been posted.
+- Fill out config tile, remove .example file extention.
 
-  - `yarn dev` or `npm dev`
+- Start and let the thing run, it loops every 24 hours and caches what has already been posted for the API. Only posts IPs once, filters out duplicates.
+
+  - `yarn dev` || `npm dev`
 
 - If you're a weirdo and want to compile to javascript:
   - `yarn build` --> `yarn start` || `npm build` --> `npm start`
