@@ -24,6 +24,7 @@ This is exactly what the title says lol, it takes jumpcloud exported logs, sifts
 - Stores hastebin dumps in `./dump/hastebin_urls.txt`
 - Auto cleans storage
 - Has an API that shows both current ones and prior stored URLs
+- Reports attackers to ARIN whois abuse contacts
 - More??? Maybe
 
 ## Discord Embed
