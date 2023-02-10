@@ -4,10 +4,10 @@ import fs from "fs";
 import path from "path";
 import axios from "axios";
 import express, { Request, Response } from "express";
-import { webhook } from "../config";
+import { config } from "../config";
+import abuseReports from "./emailHandler";
 import getIPInfo from "../utils/ipLookup";
 import postHastebin from "../utils/postHastebin";
-import abuseReports from "./emailHandler";
 
 let directoryPath = path.join(__dirname, "../dump");
 let alreadyPosted: any[] = [];
@@ -110,7 +110,7 @@ export default async function handleDumpedLogs() {
 
                 await new Promise((resolve) => setTimeout(resolve, 1000));
                 await axios
-                  .post(webhook, webhookData, {
+                  .post(config.webhook, webhookData, {
                     headers: {
                       "Content-Type": "application/json",
                     },
@@ -142,7 +142,7 @@ export default async function handleDumpedLogs() {
 
             await post();
 
-            await postHastebin(webhook, alreadyPosted);
+            await postHastebin(config.webhook, alreadyPosted);
           }
         );
       }
@@ -158,7 +158,6 @@ export default async function handleDumpedLogs() {
 
 export async function serveIPList() {
   let app = express();
-  let port = 8080;
 
   app.get("/", (req: Request, res: Response) => {
     return res.json({
@@ -176,7 +175,7 @@ export async function serveIPList() {
     return res.sendFile(path.join(__dirname, "../dump/hastebin_urls.txt"));
   });
 
-  app.listen(port, () => {
-    console.log(`Serving IPs at http://localhost:${port}`);
+  app.listen(config.port, () => {
+    console.log(`Serving IPs at http://localhost:${config.port}`);
   });
 }

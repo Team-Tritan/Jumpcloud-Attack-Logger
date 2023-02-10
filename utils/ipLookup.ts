@@ -2,7 +2,7 @@
 
 import axios from "axios";
 
-export interface asnLookup {
+export interface ipLookupRes {
   org: string;
   asn: string;
   org_id: string;
@@ -18,12 +18,12 @@ export default async function getIPInfo(ip: string) {
 
     let org_id = response.data?.net?.orgRef?.["@handle"] || null;
 
-    return { org, asn, org_id } as asnLookup;
+    return { org, asn, org_id } as ipLookupRes;
   } catch (error) {
     let org = "ARIN API Rate Limited";
     let asn = "";
     let org_id = "";
 
-    return { org, asn, org_id } as asnLookup;
+    return { org, asn, org_id } as ipLookupRes;
   }
 }

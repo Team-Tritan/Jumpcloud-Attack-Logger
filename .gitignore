@@ -1,3 +1,5 @@
 node_modules
 dump/*.json
 dump/*.txt
+config.ts
+config.js

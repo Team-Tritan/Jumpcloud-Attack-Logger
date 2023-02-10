@@ -4,7 +4,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"suck my cock\" && exit 1",
-    "start": "ts-node index.ts"
+    "dev": "ts-node index.ts",
+    "build": "tsc --build && cp -r ./dump ./dist/dump",
+    "start": "cd dist && node index.js"
   },
   "license": "fuck you",
   "dependencies": {

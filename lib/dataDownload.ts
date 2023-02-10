@@ -1,7 +1,7 @@
 "use strict";
 
 import puppeteer from "puppeteer";
-import { jc_username, jc_password } from "../config";
+import { config } from "../config";
 import { exec } from "child_process";
 
 export default async function downloadLogs() {
@@ -22,11 +22,11 @@ export default async function downloadLogs() {
   await page.focus(
     "xpath//html/body/div/section/div/div/form/fieldset[1]/div/input"
   );
-  await page.keyboard.type(jc_username);
+  await page.keyboard.type(config.jc_username);
   await page.focus(
     "xpath//html/body/div/section/div/div/form/fieldset[2]/div/input"
   );
-  await page.keyboard.type(jc_password);
+  await page.keyboard.type(config.jc_password);
   await page.click("xpath//html/body/div/section/div/div/form/button");
   await sleep(5000);
 

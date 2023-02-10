@@ -12,7 +12,10 @@ This is exactly what the title says lol, it takes jumpcloud exported logs, sifts
 
 - Start and let the thing run, it loops every 24 hours and caches what has already been posted.
 
-  - `yarn start` or `npm start`
+  - `yarn dev` or `npm dev`
+
+- If you're a weirdo and want to compile to javascript:
+  - `yarn build` --> `yarn start` || `npm build` --> `npm start`
 
 ## Extras
 

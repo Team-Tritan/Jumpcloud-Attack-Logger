@@ -3,13 +3,7 @@
 import axios, { AxiosResponse } from "axios";
 import asnLookup from "../utils/ipLookup";
 import nodemailer from "nodemailer";
-import {
-  mail_server,
-  mail_user,
-  mail_pass,
-  mail_tls,
-  mail_port,
-} from "../config";
+import { config } from "../config";
 
 export default async function abuseReports(ip: string) {
   let asn = await asnLookup(ip);
@@ -90,12 +84,12 @@ export async function sendReport(
   subject: string
 ) {
   let transporter = nodemailer.createTransport({
-    host: mail_server,
-    port: mail_port,
-    secure: mail_tls,
+    host: config.mail_server,
+    port: config.mail_port,
+    secure: config.mail_tls,
     auth: {
-      user: mail_user,
-      pass: mail_pass,
+      user: config.mail_user,
+      pass: config.mail_pass,
     },
     tls: {
       rejectUnauthorized: false,
@@ -104,7 +98,7 @@ export async function sendReport(
 
   let email_payload = {
     to: email,
-    from: mail_user,
+    from: config.mail_user,
     subject: subject,
     text: message,
   };
