@@ -20,7 +20,7 @@ export default async function handleDumpedLogs() {
 
     if (err) return console.error("Unable to scan: " + err);
 
-    files.forEach(function (file) {
+    files.forEach(async function (file) {
       if (path.extname(file) === ".json") {
         console.log("Reading file: " + file);
 
@@ -30,14 +30,20 @@ export default async function handleDumpedLogs() {
           async function (error, data) {
             if (error) return console.error("Unable to read: " + error);
 
+            console.log("Parsing logs in json");
+
             let jsonData = JSON.parse(data);
+
+            console.log("Filtering for duplicates");
 
             jsonData = jsonData.filter(
               (item: any, index: any) =>
                 jsonData.findIndex(
-                  (item2: any) => item2.src_ip === item.src_ip
+                  (item2: any) => item2?.src_ip === item?.src_ip
                 ) === index
             );
+
+            console.log("Found " + jsonData.length + " unique IPs.");
 
             let i = 0;
 
@@ -92,7 +98,9 @@ export default async function handleDumpedLogs() {
                       },
                       {
                         name: "Target System" as string,
-                        value: ("```" + item.system.hostname + "```") as string,
+                        value: ("```" +
+                          item.system?.hostname +
+                          "```") as string,
                         inline: true,
                       },
                     ],

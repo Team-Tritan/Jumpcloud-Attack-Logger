@@ -30,22 +30,24 @@ export default async function downloadLogs() {
   await page.click("xpath//html/body/div/section/div/div/form/button");
   await sleep(5000);
 
-  await page.click("xpath//html/body/div/div[4]/nav/div/div[7]/ul/li[1]/div/a");
+  await page.click(
+    "xpath///html/body/div/div[1]/div[4]/nav/div/div[7]/ul/li[1]/div/a/span"
+  );
   await sleep(5000);
 
   await page.click(
-    "xpath//html/body/div/div[4]/main/div[1]/div[3]/div/div[1]/div[1]/div[1]/div[2]/button"
+    "xpath///html/body/div/div[1]/div[4]/main/div[1]/div[3]/div/div[1]/div[1]/div[1]/div[2]/button"
   );
   await page.click(
-    "xpath///html/body/div/div[4]/main/div[1]/div[3]/div/div[1]/div[1]/div[1]/div[2]/div/div/div[1]/ul/li/span"
+    "xpath///html/body/div/div[1]/div[4]/main/div[1]/div[3]/div/div[1]/div[1]/div[1]/div[2]/div/div/div[1]/ul/li/span"
   );
   await sleep(2000);
 
   await page.click(
-    "xpath//html/body/div/div[4]/main/div[1]/div[3]/div/div[4]/div[1]/div/div[2]/a/span"
+    "xpath///html/body/div/div[1]/div[4]/main/div[1]/div[3]/div/div[4]/div[1]/div/div[2]/a/span"
   );
   await page.click(
-    "xpath///html/body/div/div[4]/main/div[1]/div[3]/div/div[4]/div[1]/div/div[2]/ul/li/menu/li[1]/a/div/span"
+    "xpath///html/body/div/div[1]/div[4]/main/div[1]/div[3]/div/div[4]/div[1]/div/div[2]/ul/li/menu/li[1]/a/div/span"
   );
   await sleep(30000);
 
