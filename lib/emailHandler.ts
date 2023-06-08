@@ -1,6 +1,6 @@
 "use strict";
 
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import asnLookup from "../utils/ipLookup";
 import nodemailer from "nodemailer";
 import { config } from "../config";
