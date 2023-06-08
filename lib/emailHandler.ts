@@ -6,46 +6,30 @@ import nodemailer from "nodemailer";
 import { config } from "../config";
 
 export default async function abuseReports(ip: string) {
-  if (!config.mail_enabled) return;
+  if (!config.mail_enabled || !ip || ip === "") return;
 
-  if (!ip) return;
-  if (ip === "") return;
-
-  let asn = await asnLookup(ip);
-
-  let abuse_lookup = await axios
-    .get(`https://whois.arin.net/rest/org/${asn?.org_id}/pocs.json`)
-    .then(async (response: AxiosResponse) => {
-      return response.data;
-    })
-    .catch((error: any) => {
-      return;
-    });
+  const asn = await asnLookup(ip);
 
   try {
-    Promise.all(
-      abuse_lookup.pocs.pocLinkRef.map(async (poc: any) => {
-        let err: boolean = false;
+    const abuseLookupResponse = await axios.get(
+      `https://whois.arin.net/rest/org/${asn?.org_id}/pocs.json`
+    );
+    const abuseLookup = abuseLookupResponse.data;
 
+    await Promise.all(
+      abuseLookup.pocs.pocLinkRef.map(async (poc: any) => {
         if (poc["@description"] === "Abuse") {
-          let link = poc["$"];
+          const link = poc["$"];
 
-          let poc_record = await axios
-            .get(`${link}.json`)
-            .then((response) => {
-              return response.data;
-            })
-            .catch((error: any) => {
-              return (err = true);
-            });
+          try {
+            const pocRecordResponse = await axios.get(`${link}.json`);
+            const pocRecord = pocRecordResponse.data;
+            const email = pocRecord.poc.emails.email["$"];
 
-          let email = poc_record.poc.emails.email["$"];
+            if (!email) return;
 
-          if (!email) return;
-          if (err) return;
-
-          let subject = `Abuse Report: IP Address ${ip}`;
-          let message = `
+            const subject = `Abuse Report: IP Address ${ip}`;
+            const message = `
 ARIN Abuse Contact,
 
 This email is regarding ${ip} - ${asn?.asn} - ${asn?.org}
@@ -66,15 +50,22 @@ Sincerely,
 Handu Kungan Parjeet
 Chief Security Advisor
 Tritan Development
-      `;
+`;
 
-          if (email?.endsWith("arin.net")) return;
-          if (email?.endsWith("ripe.net")) return;
-          if (email?.endsWith("apnic.net")) return;
-          if (email?.endsWith("lacnic.net")) return;
-          if (email?.endsWith("afrinic.net")) return;
+            const validEmailDomains = [
+              "arin.net",
+              "ripe.net",
+              "apnic.net",
+              "lacnic.net",
+              "afrinic.net",
+            ];
+            if (validEmailDomains.some((domain) => email?.endsWith(domain)))
+              return;
 
-          await sendReport(email, message, subject);
+            await sendReport(email, message, subject);
+          } catch (error) {
+            return;
+          }
         }
       })
     );
@@ -83,12 +74,8 @@ Tritan Development
   }
 }
 
-export async function sendReport(
-  email: string,
-  message: string,
-  subject: string
-) {
-  let transporter = nodemailer.createTransport({
+async function sendReport(email: string, message: string, subject: string) {
+  const transporter = nodemailer.createTransport({
     host: config.mail_server,
     port: config.mail_port,
     secure: config.mail_tls,
@@ -101,19 +88,19 @@ export async function sendReport(
     },
   });
 
-  let email_payload = {
+  const emailPayload = {
     to: email,
     from: config.mail_user,
     subject: subject,
     text: message,
   };
 
-  transporter.sendMail(email_payload, (error: any, info: any) => {
+  transporter.sendMail(emailPayload, (error: any, info: any) => {
     if (error) {
       return;
     } else {
       return console.log(
-        `Abuse email sent to ${email_payload.to} - ` + info.response
+        `Abuse email sent to ${emailPayload.to} - ` + info.response
       );
     }
   });
