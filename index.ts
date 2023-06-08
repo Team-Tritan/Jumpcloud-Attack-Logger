@@ -5,7 +5,7 @@ import dataHandler, { serveIPList } from "./lib/dataHandler";
 import clearDumpCache from "./utils/clearDump";
 
 (async () => {
-  //await dataDownload();
+  await dataDownload();
   await dataHandler();
   await serveIPList();
 })();
