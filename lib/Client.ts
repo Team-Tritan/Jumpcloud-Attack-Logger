@@ -1,7 +1,7 @@
 "use strict";
 
 import dataDownload from "./dataDownload";
-import dataHandler, { serveIPList } from "./dataHandler";
+import dataHandler, { serveIPList } from "./handlers/dataHandler";
 import clearDumpCache from "../utils/clearDump";
 
 export default class AttackLogger {

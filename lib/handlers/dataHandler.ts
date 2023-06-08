@@ -4,11 +4,11 @@ import fs from "fs";
 import path from "path";
 import axios from "axios";
 import express, { Request, Response } from "express";
-import { config } from "../config";
+import { config } from "../../config";
 import abuseReports from "./emailHandler";
-import getIPInfo from "../utils/ipLookup";
-import postHastebin from "../utils/postHastebin";
-import { sleep } from "./dataDownload";
+import getIPInfo from "../../utils/ipLookup";
+import postHastebin from "../../utils/postHastebin";
+import { sleep } from "../dataDownload";
 
 const directoryPath = path.join(__dirname, "../dump");
 const alreadyPosted: any[] = [];
