@@ -1,5 +1,3 @@
-"use strict";
-
 import dataDownload from "./lib/dataDownload";
 import dataHandler, { serveIPList } from "./lib/dataHandler";
 import clearDumpCache from "./utils/clearDump";
