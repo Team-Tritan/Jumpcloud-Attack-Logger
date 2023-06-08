@@ -1,9 +1,9 @@
 "use strict";
 
 import axios from "axios";
-import asnLookup from "../utils/ipLookup";
+import asnLookup from "../../utils/ipLookup";
 import nodemailer from "nodemailer";
-import { config } from "../config";
+import { config } from "../../config";
 
 export default async function abuseReports(ip: string) {
   if (!config.mail_enabled || !ip || ip === "") return;
