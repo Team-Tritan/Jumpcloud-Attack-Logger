@@ -1,6 +1,6 @@
 "use strict";
 
-import dataDownload from "./dataDownload";
+import dataDownload from "./handlers/dataDownload";
 import dataHandler, { serveIPList } from "./handlers/dataHandler";
 import clearDumpCache from "../utils/clearDump";
 

@@ -1,7 +1,7 @@
 "use strict";
 
 import puppeteer from "puppeteer";
-import { config } from "../config";
+import { config } from "../../config";
 import { exec } from "child_process";
 
 export default async function downloadLogs() {

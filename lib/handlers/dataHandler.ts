@@ -8,7 +8,7 @@ import { config } from "../../config";
 import abuseReports from "./emailHandler";
 import getIPInfo from "../../utils/ipLookup";
 import postHastebin from "../../utils/postHastebin";
-import { sleep } from "../dataDownload";
+import { sleep } from "./dataDownload";
 
 const directoryPath = path.join(__dirname, "../dump");
 const alreadyPosted: any[] = [];
