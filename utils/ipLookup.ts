@@ -8,25 +8,25 @@ export interface ipLookupRes {
   org_id: string;
 }
 
-export default async function getIPInfo(ip: string) {
-  if (!ip) return;
-  if (ip === "") return;
+export default async function getIPInfo(ip: string): Promise<ipLookupRes> {
+  if (!ip) return { org: "", asn: "", org_id: "" };
 
   try {
-    let response = await axios.get(`https://whois.arin.net/rest/ip/${ip}.json`);
+    const response = await axios.get(
+      `https://whois.arin.net/rest/ip/${ip}.json`
+    );
 
-    let org = response.data?.net?.orgRef?.["@name"] || "ISP Unknown to ARIN";
-    let asn =
+    const org = response.data?.net?.orgRef?.["@name"] || "ISP Unknown to ARIN";
+    const asn =
       response.data?.net?.originASes?.originAS?.["$"] || "ASN Unknown to ARIN";
+    const org_id = response.data?.net?.orgRef?.["@handle"] || "";
 
-    let org_id = response.data?.net?.orgRef?.["@handle"] || null;
-
-    return { org, asn, org_id } as ipLookupRes;
+    return { org, asn, org_id };
   } catch (error) {
-    let org = "ARIN API Rate Limited";
-    let asn = "";
-    let org_id = "";
+    const org = "ARIN API Rate Limited";
+    const asn = "";
+    const org_id = "";
 
-    return { org, asn, org_id } as ipLookupRes;
+    return { org, asn, org_id };
   }
 }
