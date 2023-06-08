@@ -29,7 +29,7 @@ export default async function handleDumpedLogs() {
       }
     }
 
-    const embedSize = 4;
+    const embedSize = 10;
     const chunks = chunkArray(embeds, embedSize);
 
     console.log(
