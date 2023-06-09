@@ -10,7 +10,7 @@ import getIPInfo from "../../utils/ipLookup";
 import postHastebin from "../../utils/postHastebin";
 import { sleep } from "./dataDownload";
 
-const directoryPath = path.join(__dirname, "../dump");
+const directoryPath = path.join(__dirname, "../../dump");
 const alreadyPosted: any[] = [];
 
 export default async function handleDumpedLogs() {
