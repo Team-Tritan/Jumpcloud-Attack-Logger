@@ -7,7 +7,7 @@ import express, { Request, Response } from "express";
 import { config } from "../../config";
 import abuseReports from "./emailHandler";
 import getIPInfo from "../../utils/ipLookup";
-import postHastebin from "../../utils/postResults";
+import postResults from "../../utils/postResults";
 import { sleep } from "./dataDownload";
 import * as i from "../../interfaces";
 
@@ -42,7 +42,7 @@ export default async function handleDumpedLogs() {
       await sleep(5000);
     }
 
-    await postHastebin(config.webhook, collectedData);
+    await postResults(config.webhook, collectedData);
   } catch (error) {
     console.error("Unable to scan directory: " + error);
   }
