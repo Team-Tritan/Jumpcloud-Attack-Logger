@@ -3,6 +3,7 @@
 import puppeteer from "puppeteer";
 import { config } from "../../config";
 import { exec } from "child_process";
+import { sleep } from "../../utils/sleep";
 
 export default async function downloadLogs() {
   let browser = await puppeteer.launch({
@@ -57,10 +58,4 @@ export default async function downloadLogs() {
 
   await browser.close();
   await sleep(15000);
-}
-
-export async function sleep(ms: number) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
 }
