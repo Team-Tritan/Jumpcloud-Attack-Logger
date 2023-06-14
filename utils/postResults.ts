@@ -23,7 +23,7 @@ export default async function postResults(
 
   const payload = [
     {
-      image_url: "https://im.horny.rip/fbi/RHNXxg79vS.png",
+      image: "https://im.horny.rip/fbi/RHNXxg79vS.png",
       author: {
         name: date,
         url: url,
