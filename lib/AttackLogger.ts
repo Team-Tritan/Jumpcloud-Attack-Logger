@@ -5,17 +5,17 @@ import dataHandler, { serveIPList } from "./handlers/dataHandler";
 import clearDumpCache from "../utils/clearDump";
 
 export default class AttackLogger {
-  async initialize() {
+  async init() {
     await dataDownload();
     await dataHandler();
     await serveIPList();
   }
 
   async start() {
-    await this.initialize();
+    await this.init();
 
     setInterval(async () => {
-      await this.initialize();
+      await this.init();
     }, 1000 * 60 * 60 * 24);
 
     setInterval(async () => {
