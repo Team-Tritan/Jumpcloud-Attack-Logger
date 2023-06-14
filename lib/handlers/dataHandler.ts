@@ -9,9 +9,11 @@ import abuseReports from "./emailHandler";
 import getIPInfo from "../../utils/ipLookup";
 import postHastebin from "../../utils/postHastebin";
 import { sleep } from "./dataDownload";
+import * as i from "../../interfaces";
 
 const directoryPath = path.join(__dirname, "../../dump");
 const alreadyPosted: any[] = [];
+const alreadySent: i.collectedData[] = [];
 
 export default async function handleDumpedLogs() {
   console.log("Starting log grabber...");
@@ -41,7 +43,7 @@ export default async function handleDumpedLogs() {
       await sleep(5000);
     }
 
-    await postHastebin(config.webhook, alreadyPosted);
+    await postHastebin(config.webhook, alreadySent);
   } catch (error) {
     console.error("Unable to scan directory: " + error);
   }
@@ -75,6 +77,15 @@ async function processLogFile(file: string) {
       const item = uniqueData[i];
       const asnLookup = await getIPInfo(item.src_ip);
 
+      const data: i.collectedData = {
+        ip: item?.src_ip,
+        asn: asnLookup,
+        attackDescription: item?.description,
+        attackLocation: item?.src_geoip,
+        systemHostname: item?.system.hostname,
+        timestamp: item?.system_timestamp,
+      };
+
       const embed = {
         title: `${i + 1} Unique Attacks / ${
           uniqueData.length
@@ -87,49 +98,50 @@ async function processLogFile(file: string) {
         fields: [
           {
             name: "Timestamp",
-            value: "```" + item.system_timestamp + "```",
+            value: "```" + data.timestamp + "```",
             inline: false,
           },
           {
             name: "ARIN ASN/ISP Whois",
             value:
               "```" +
-              (asnLookup?.org || "") +
+              (data.asn?.org || "") +
               "\n\n" +
-              (asnLookup?.asn || "") +
+              (data.asn?.asn || "") +
               "```",
             inline: false,
           },
           {
             name: "Attacker IP",
-            value: "```" + item.src_ip + "```",
+            value: "```" + data.ip + "```",
             inline: true,
           },
           {
             name: "Attacker Location",
             value:
               "```" +
-              `${item?.src_geoip?.region_name || "Unknown City"}, ${
-                item?.src_geoip?.country_code || "Unknown Country"
+              `${data?.attackLocation.region_name || "Unknown City"}, ${
+                data?.attackLocation?.country_code || "Unknown Country"
               }` +
               "```",
             inline: true,
           },
           {
             name: "Target System",
-            value: "```" + item.system?.hostname + "```",
+            value: "```" + data?.systemHostname + "```",
             inline: true,
           },
         ],
       };
 
       console.log(
-        `Parsing and chunking data for ${item.src_ip} - ${asnLookup?.asn} - ${asnLookup?.org}.`
+        `Parsing and chunking data for ${data.ip} - ${data.asn?.asn} - ${data.asn?.org}.`
       );
 
+      alreadySent.push(data);
       fileEmbeds.push(embed);
-      alreadyPosted.push(item.src_ip);
-      await abuseReports(item.src_ip);
+      //alreadyPosted.push(item.src_ip);
+      await abuseReports(data.ip);
     }
   } catch (error) {
     console.error("Unable to read file: " + error);
