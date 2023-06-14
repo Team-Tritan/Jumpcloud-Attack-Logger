@@ -1,5 +1,5 @@
 "use strict";
 
-import AttackLogger from "./lib/Client";
+import AttackLogger from "./lib/AttackLogger";
 
 new AttackLogger().start();
