@@ -1,14 +1,14 @@
 "use strict";
 
 import dataDownload from "./handlers/dataDownload";
-import dataHandler, { initAPI } from "./handlers/dataHandler";
+import dataHandler, { api } from "./handlers/dataHandler";
 import clearDumpCache from "../utils/clearDump";
 
 export default class AttackLogger {
   async init() {
     await dataDownload();
     await dataHandler();
-    await initAPI();
+    await api();
   }
 
   async start() {
