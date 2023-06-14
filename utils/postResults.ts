@@ -5,12 +5,12 @@ import { exec } from "child_process";
 
 export default async function postResults(
   webhook: string,
-  alreadyPosted: any[]
+  alreadyPosted: any
 ): Promise<void> {
   if (!webhook) return;
   if (webhook === "") return;
 
-  const dumpData = JSON.stringify({ attacker_ips: alreadyPosted });
+  const dumpData = JSON.stringify(alreadyPosted);
 
   const response = await axios.post(
     "https://bin.tritan.gg/documents",
@@ -23,16 +23,12 @@ export default async function postResults(
 
   const payload = [
     {
+      image_url: "https://im.horny.rip/fbi/RHNXxg79vS.png",
       author: {
         name: date,
         url: url,
       },
-      fields: [
-        {
-          name: "Data Dump:",
-          value: url,
-        },
-      ],
+      description: url,
       color: 0x8953fb,
     },
   ];
