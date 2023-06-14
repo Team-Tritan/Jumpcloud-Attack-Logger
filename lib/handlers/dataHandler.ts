@@ -193,7 +193,7 @@ export async function api() {
     return res.json({
       current_day: {
         date: new Date().toLocaleDateString(),
-        attacker_ips: collectedData,
+        attacks: collectedData,
       },
       prior_dumps: {
         url: "/prior",
