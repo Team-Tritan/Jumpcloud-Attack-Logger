@@ -12,7 +12,6 @@ import { sleep } from "./dataDownload";
 import * as i from "../../interfaces";
 
 const directoryPath = path.join(__dirname, "../../dump");
-const alreadyPosted: any[] = [];
 const alreadySent: i.collectedData[] = [];
 
 export default async function handleDumpedLogs() {
@@ -140,7 +139,6 @@ async function processLogFile(file: string) {
 
       alreadySent.push(data);
       fileEmbeds.push(embed);
-      //alreadyPosted.push(item.src_ip);
       await abuseReports(data.ip);
     }
   } catch (error) {
