@@ -8,7 +8,7 @@ import { config } from "../../config";
 import abuseReports from "./emailHandler";
 import getIPInfo from "../../utils/ipLookup";
 import postResults from "../../utils/postResults";
-import { sleep } from "./dataDownload";
+import { sleep } from "../../utils/sleep";
 import * as i from "../../interfaces";
 
 const directoryPath = path.join(__dirname, "../../dump");
