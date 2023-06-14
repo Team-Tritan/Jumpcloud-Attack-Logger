@@ -186,7 +186,7 @@ export function chunkArray(array: any[], chunkSize: number) {
   return chunks;
 }
 
-export async function serveIPList() {
+export async function initAPI() {
   const api = express();
 
   api.get("/", (req: Request, res: Response) => {
