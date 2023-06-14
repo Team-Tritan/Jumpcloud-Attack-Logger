@@ -7,12 +7,12 @@ import express, { Request, Response } from "express";
 import { config } from "../../config";
 import abuseReports from "./emailHandler";
 import getIPInfo from "../../utils/ipLookup";
-import postHastebin from "../../utils/postHastebin";
+import postHastebin from "../../utils/postResults";
 import { sleep } from "./dataDownload";
 import * as i from "../../interfaces";
 
 const directoryPath = path.join(__dirname, "../../dump");
-const alreadySent: i.collectedData[] = [];
+const collectedData: i.collectedData[] = [];
 
 export default async function handleDumpedLogs() {
   console.log("Starting log grabber...");
@@ -42,7 +42,7 @@ export default async function handleDumpedLogs() {
       await sleep(5000);
     }
 
-    await postHastebin(config.webhook, alreadySent);
+    await postHastebin(config.webhook, collectedData);
   } catch (error) {
     console.error("Unable to scan directory: " + error);
   }
@@ -137,7 +137,7 @@ async function processLogFile(file: string) {
         `Parsing and chunking data for ${data.ip} - ${data.asn?.asn} - ${data.asn?.org}.`
       );
 
-      alreadySent.push(data);
+      collectedData.push(data);
       fileEmbeds.push(embed);
       await abuseReports(data.ip);
     }
@@ -160,13 +160,16 @@ async function sendWebhook(embeds: any[]) {
         "Content-Type": "application/json",
       },
     });
+
     console.log("Webhook delivered successfully");
   } catch (error: any) {
     if (error.response && error.response.status === 429) {
       console.log("Webhook rate limited, retrying in 5 seconds...");
 
       const retryAfter = error.response.data.retry_after || 5;
+
       await sleep((retryAfter + 5) * 1000);
+
       await sendWebhook(embeds);
     } else {
       console.error(error);
@@ -176,6 +179,7 @@ async function sendWebhook(embeds: any[]) {
 
 export function chunkArray(array: any[], chunkSize: number) {
   const chunks = [];
+
   for (let i = 0; i < array.length; i += chunkSize) {
     chunks.push(array.slice(i, i + chunkSize));
   }
@@ -183,13 +187,13 @@ export function chunkArray(array: any[], chunkSize: number) {
 }
 
 export async function serveIPList() {
-  const app = express();
+  const api = express();
 
-  app.get("/", (req: Request, res: Response) => {
+  api.get("/", (req: Request, res: Response) => {
     return res.json({
       current_day: {
         date: new Date().toLocaleDateString(),
-        attacker_ips: alreadyPosted,
+        attacker_ips: collectedData,
       },
       prior_dumps: {
         url: "/prior",
@@ -197,11 +201,11 @@ export async function serveIPList() {
     });
   });
 
-  app.get("/prior", (req: any, res: any) => {
+  api.get("/prior", (req: any, res: any) => {
     return res.sendFile(path.join(__dirname, "../dump/hastebin_urls.txt"));
   });
 
-  app.listen(config.port, () => {
+  api.listen(config.port, () => {
     console.log(`Serving IPs at http://localhost:${config.port}`);
   });
 }
