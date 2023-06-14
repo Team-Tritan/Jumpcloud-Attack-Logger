@@ -1,14 +1,9 @@
 "use strict";
 
 import axios from "axios";
+import * as i from "../interfaces";
 
-export interface ipLookupRes {
-  org: string;
-  asn: string;
-  org_id: string;
-}
-
-export default async function getIPInfo(ip: string): Promise<ipLookupRes> {
+export default async function getIPInfo(ip: string): Promise<i.ipLookupRes> {
   if (!ip) return { org: "", asn: "", org_id: "" };
 
   try {
