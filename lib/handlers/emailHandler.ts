@@ -34,7 +34,7 @@ ARIN Abuse Contact,
 
 This email is regarding ${ip} - ${asn?.asn} - ${asn?.org}
 
-I am writing to bring to your attention a serious security issue that has been detected in our network. Our security team has identified that the IP address ${ip} is being used to carry out either Distributed Denial of Service (DDOS) attacks or to spam failed login attempts, which is an attempt to brute force into our systems.
+I am writing to bring to your attention a serious security attack that has been detected in our network. Our security team has identified that the IP address ${ip} is being used to carry out either Distributed Denial of Service (DDOS) attacks or to spam failed login attempts, which is an attempt to brute force into our systems.
 
 The DDOS attack can cause a significant disruption to our network and prevent legitimate users from accessing our services. On the other hand, the brute force attack could lead to a potential data breach if successful, putting sensitive information at risk.
 

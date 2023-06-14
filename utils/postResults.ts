@@ -23,12 +23,14 @@ export default async function postResults(
 
   const payload = [
     {
-      image: "https://im.horny.rip/fbi/RHNXxg79vS.png",
+      image: {
+        url: "https://im.horny.rip/fbi/RHNXxg79vS.png",
+      },
       author: {
         name: date,
         url: url,
       },
-      description: url,
+      description: `${url}`,
       color: 0x8953fb,
     },
   ];
