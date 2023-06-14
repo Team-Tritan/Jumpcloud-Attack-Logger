@@ -79,7 +79,7 @@ async function processLogFile(file: string) {
       const data: i.collectedData = {
         ip: item?.src_ip,
         asn: asnLookup,
-        attackDescription: item?.description,
+        attackDescription: item?.message,
         attackLocation: item?.src_geoip,
         systemHostname: item?.system.hostname,
         timestamp: item?.system_timestamp,
