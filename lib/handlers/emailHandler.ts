@@ -59,12 +59,13 @@ Tritan Development
               "lacnic.net",
               "afrinic.net",
             ];
+
             if (validEmailDomains.some((domain) => email?.endsWith(domain)))
               return;
 
             await sendReport(email, message, subject);
           } catch (error) {
-            return;
+            return console.error(`Mailer Err: `, error);
           }
         }
       })
@@ -97,7 +98,7 @@ async function sendReport(email: string, message: string, subject: string) {
 
   transporter.sendMail(emailPayload, (error: any, info: any) => {
     if (error) {
-      return;
+      return console.error(`Mailer Err: `, error);
     } else {
       return console.log(
         `Abuse email sent to ${emailPayload.to} - ` + info.response
