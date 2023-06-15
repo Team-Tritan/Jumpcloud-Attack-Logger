@@ -28,7 +28,7 @@ export default async function postResults(
       image: {
         url: "https://im.horny.rip/api/content/raw/RHNXxg79vS.png",
       },
-      description: `(Click Me)[${url}]`,
+      description: `${url}`,
     },
   ];
 
