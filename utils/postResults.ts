@@ -16,7 +16,7 @@ export default async function postResults(
     "https://bin.tritan.gg/documents",
     dumpData
   );
-  const url = "https://bin.tritan.gg/raw/" + response.data.key;
+  const url = "https://bin.tritan.gg/json/" + response.data.key;
 
   const d = new Date();
   const date = d.toLocaleDateString();
@@ -28,7 +28,7 @@ export default async function postResults(
       image: {
         url: "https://im.horny.rip/api/content/raw/RHNXxg79vS.png",
       },
-      description: `[Click Me](${url})`,
+      description: `(Click Me)[${url}]`,
     },
   ];
 
