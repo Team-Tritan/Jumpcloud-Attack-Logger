@@ -23,25 +23,26 @@ export default async function postResults(
 
   const payload = [
     {
+      color: 0x5865f2,
+      title: `Data Dump`,
       image: {
         url: "https://im.horny.rip/fbi/RHNXxg79vS.png",
       },
-      author: {
-        name: date,
-        url: url,
-      },
       description: `${url}`,
-      color: 0x8953fb,
     },
   ];
 
   const webhookData = JSON.stringify({ content: null, embeds: payload });
 
-  await axios.post(webhook, webhookData, {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  try {
+    await axios.post(webhook, webhookData, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+  } catch (e: any) {
+    console.error(`Final embed error: `, e);
+  }
 
   exec(`echo "${date} - ${url}" >> ./dump/hastebin_urls.txt`);
 
