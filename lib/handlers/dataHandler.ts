@@ -19,19 +19,19 @@ export default async function handleDumpedLogs() {
 
   try {
     const files = await fs.promises.readdir(directoryPath);
+
     console.log("Reading directory: " + directoryPath);
 
     const embeds = [];
 
-    for (const file of files) {
+    for (let file of files)
       if (path.extname(file) === ".json") {
         const fileEmbeds = await processLogFile(file);
         embeds.push(...fileEmbeds);
       }
-    }
 
-    const embedSize = 10;
-    const chunks = chunkArray(embeds, embedSize);
+    let embedSize = 10;
+    let chunks = chunkArray(embeds, embedSize);
 
     console.log(
       `Successfully chunked data into ${chunks.length} posts with ${embedSize} embeds each.`
@@ -50,7 +50,7 @@ export default async function handleDumpedLogs() {
 
 async function processLogFile(file: string) {
   console.log("Reading file: " + file);
-  const fileEmbeds = [];
+  let fileEmbeds = [];
 
   try {
     const data = await fs.promises.readFile(
@@ -60,7 +60,7 @@ async function processLogFile(file: string) {
 
     console.log("Parsing logs in json");
 
-    const jsonData = JSON.parse(data);
+    let jsonData = JSON.parse(data);
 
     console.log("Filtering for duplicates");
 
@@ -77,12 +77,12 @@ async function processLogFile(file: string) {
       const asnLookup = await getIPInfo(item.src_ip);
 
       const data: i.collectedData = {
-        ip: item?.src_ip,
-        asn: asnLookup,
-        attackDescription: item?.message,
-        attackLocation: item?.src_geoip,
-        systemHostname: item?.system.hostname,
         timestamp: item?.system_timestamp,
+        ip: item?.src_ip,
+        lookup: asnLookup,
+        description: item?.message,
+        location: item?.src_geoip,
+        systemHostname: item?.system.hostname,
       };
 
       const embed = {
@@ -104,9 +104,9 @@ async function processLogFile(file: string) {
             name: "ARIN ASN/ISP Whois",
             value:
               "```" +
-              (data.asn?.org || "") +
+              (data.lookup?.org || "") +
               "\n\n" +
-              (data.asn?.asn || "") +
+              (data.lookup?.asn || "") +
               "```",
             inline: false,
           },
@@ -119,8 +119,8 @@ async function processLogFile(file: string) {
             name: "Attacker Location",
             value:
               "```" +
-              `${data?.attackLocation.region_name || "Unknown City"}, ${
-                data?.attackLocation?.country_code || "Unknown Country"
+              `${data?.location.region_name || "Unknown City"}, ${
+                data?.location?.country_code || "Unknown Country"
               }` +
               "```",
             inline: true,
@@ -134,7 +134,7 @@ async function processLogFile(file: string) {
       };
 
       console.log(
-        `Parsing and chunking data for ${data.ip} - ${data.asn?.asn} - ${data.asn?.org}.`
+        `Parsing and chunking data for ${data.ip} - ${data.lookup?.asn} - ${data.lookup?.org}.`
       );
 
       collectedData.push(data);

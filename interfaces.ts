@@ -21,13 +21,13 @@ export interface ipLookupRes {
 
 export interface collectedData {
   ip: string;
-  asn: {
+  lookup: {
     asn: string;
     org: string;
     org_id: string;
   };
-  attackDescription: string;
-  attackLocation: {
+  description: string;
+  location: {
     region_name: string;
     country_code: string;
   };

@@ -21,14 +21,14 @@ export default async function postResults(
   const d = new Date();
   const date = d.toLocaleDateString();
 
-  const payload = [
+  let payload = [
     {
       color: 0x5865f2,
       title: `Data Dump`,
       image: {
-        url: "https://im.horny.rip/fbi/RHNXxg79vS.png",
+        url: "https://im.horny.rip/api/content/raw/RHNXxg79vS.png",
       },
-      description: `${url}`,
+      description: `[Click Me](${url})`,
     },
   ];
 
