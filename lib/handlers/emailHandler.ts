@@ -91,7 +91,7 @@ async function sendReport(email: string, message: string, subject: string) {
 
   const emailPayload = {
     to: email,
-    from: config.send_from,
+    from: config.mail_from,
     subject: subject,
     text: message,
   };
