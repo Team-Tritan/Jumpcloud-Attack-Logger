@@ -11,6 +11,7 @@ export interface Config {
   mail_tls: boolean;
   mail_user: string;
   mail_pass: string;
+  send_from: string;
 }
 
 export interface ipLookupRes {
