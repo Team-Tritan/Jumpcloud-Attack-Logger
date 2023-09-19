@@ -1,5 +1,7 @@
 "use strict";
 
+import { Config } from "./interfaces";
+
 interface Config {
   webhook: string;
   jc_username: string;
