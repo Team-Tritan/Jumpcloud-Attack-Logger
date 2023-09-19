@@ -80,6 +80,7 @@ async function sendReport(email: string, message: string, subject: string) {
     host: config.mail_server,
     port: config.mail_port,
     secure: config.mail_tls,
+    from: config.send_from,
     auth: {
       user: config.mail_user,
       pass: config.mail_pass,

@@ -8,6 +8,8 @@ import { sleep } from "../../utils/sleep";
 export default async function downloadLogs() {
   let browser = await puppeteer.launch({
     headless: false,
+    executablePath:
+      "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
   });
 
   let page = await browser.newPage();
