@@ -2,20 +2,6 @@
 
 import { Config } from "./interfaces";
 
-interface Config {
-  webhook: string;
-  jc_username: string;
-  jc_password: string;
-  port: number;
-  mail_enabled: boolean;
-  mail_server: string;
-  mail_port: number;
-  mail_tls: boolean;
-  mail_user: string;
-  mail_pass: string;
-  mail_from: string;
-}
-
 export let config: Config = {
   webhook:
     "https://discord.com/api/webhooks/x/x",
