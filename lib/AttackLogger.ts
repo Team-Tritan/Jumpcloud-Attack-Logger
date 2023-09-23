@@ -5,6 +5,10 @@ import dataHandler, { api } from "./handlers/dataHandler";
 import clearDumpCache from "../utils/clearDump";
 
 export default class AttackLogger {
+  constructor() {
+    this.start();
+  }
+
   async init() {
     await dataDownload();
     await dataHandler();

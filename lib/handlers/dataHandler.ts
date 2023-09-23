@@ -82,7 +82,7 @@ async function processLogFile(file: string) {
         lookup: asnLookup,
         description: item?.message,
         location: item?.src_geoip,
-        systemHostname: item?.system.hostname,
+        systemHostname: item?.system?.hostname || "N/A",
       };
 
       const embed = {

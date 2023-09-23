@@ -2,4 +2,4 @@
 
 import AttackLogger from "./lib/AttackLogger";
 
-new AttackLogger().start();
+new AttackLogger();
